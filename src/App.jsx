@@ -25,7 +25,7 @@ const App = () => {
   const _motion = motion;
   // Game States: HOME, SETUP_PLAYERS, SETUP_CATEGORY, DISTRIBUTION, GAME_PLAY, RESULT
   const [gameState, setGameState] = useState('HOME');
-  const [players, setPlayers] = useState(['Oyuncu 1', 'Oyuncu 2', 'Oyuncu 3', 'Oyuncu 4', 'Oyuncu 5']);
+  const [players, setPlayers] = useState(['Eren', 'Ömer', 'Kaan', 'Muhammet']);
   const [imposterCount, setImposterCount] = useState(1);
   // Multiple categories can be selected
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -33,11 +33,11 @@ const App = () => {
   const [gameData, setGameData] = useState({
     word: '',
     hint: '',
-    playerRoles: [] // { name, role: 'PLAYER'|'IMPOSTER', revealed: false }
+    playerRoles: [], // { name, role: 'PLAYER'|'IMPOSTER', revealed: false }
+    starterIndex: 0
   });
   const [activeRevealIndex, setActiveRevealIndex] = useState(null);
   const [newPlayerName, setNewPlayerName] = useState('');
-  const [currentRound, setCurrentRound] = useState(1);
   const [showHowTo, setShowHowTo] = useState(false);
 
   // ---------------------------------------------------------
@@ -108,8 +108,19 @@ const App = () => {
       className="container"
     >
       <header style={{ marginBottom: 24 }}>
-        <h2 style={{ fontSize: '1.8rem' }}>Oyuncuları Ekle</h2>
-        <p style={{ color: 'var(--text-muted)' }}>En az 3, en fazla 20 oyuncu</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+          <button
+            className="btn-secondary"
+            style={{ padding: 10, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            onClick={() => setGameState('HOME')}
+          >
+            <ChevronRight style={{ transform: 'rotate(180deg)' }} />
+          </button>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <h2 style={{ fontSize: '1.8rem' }}>Oyuncuları Ekle</h2>
+            <p style={{ color: 'var(--text-muted)' }}>En az 3, en fazla 20 oyuncu</p>
+          </div>
+        </div>
       </header>
 
       <form onSubmit={addPlayer} style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
@@ -192,11 +203,39 @@ const App = () => {
       className="container"
     >
       <header style={{ marginBottom: 24 }}>
-        <h2 style={{ fontSize: '1.8rem' }}>Kategori Seç</h2>
-        <p style={{ color: 'var(--text-muted)' }}>Tahmin edilecek kelime gruplarını seçin (birden fazla)</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+          <button
+            className="btn-secondary"
+            style={{ padding: 10, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            onClick={() => setGameState('SETUP_PLAYERS')}
+          >
+            <ChevronRight style={{ transform: 'rotate(180deg)' }} />
+          </button>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <h2 style={{ fontSize: '1.8rem' }}>Kategori Seç</h2>
+            <p style={{ color: 'var(--text-muted)' }}>Tahmin edilecek kelime gruplarını seçin (birden fazla)</p>
+          </div>
+        </div>
       </header>
 
-      <div style={{ flex: 1, overflowY: 'auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, paddingBottom: 20 }}>
+      <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
+        <button
+          className="btn-secondary"
+          style={{ flex: 1 }}
+          onClick={() => setSelectedCategories(Object.keys(categories))}
+        >
+          Tümünü Seç
+        </button>
+        <button
+          className="btn-secondary"
+          style={{ flex: 1 }}
+          onClick={() => setSelectedCategories([])}
+        >
+          Temizle
+        </button>
+      </div>
+
+      <div style={{ flex: 1, overflowY: 'auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, paddingBottom: 20 }}>
         {Object.keys(categories).map((cat) => (
           <motion.div
             whileTap={{ scale: 0.95 }}
@@ -238,11 +277,10 @@ const App = () => {
       </div>
 
       <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
-        <button className="btn-secondary" style={{ flex: 1 }} onClick={() => setGameState('SETUP_PLAYERS')}>Geri</button>
         <button
           className="btn-primary"
           disabled={selectedCategories.length === 0}
-          style={{ flex: 2, opacity: selectedCategories.length === 0 ? 0.5 : 1 }}
+          style={{ flex: 1, opacity: selectedCategories.length === 0 ? 0.5 : 1 }}
           onClick={startGame}
         >
           Hazırız!
@@ -260,6 +298,7 @@ const App = () => {
     const selectedItem = catWords[randomIndex];
     const selectedWord = Array.isArray(selectedItem) ? selectedItem[0] : selectedItem.word;
     const selectedHint = Array.isArray(selectedItem) ? selectedItem[1] : selectedItem.hint;
+    const starterIndex = Math.floor(Math.random() * players.length);
 
     // Distribute roles
     let roles = players.map((name) => ({ name, role: 'PLAYER', revealed: false }));
@@ -275,9 +314,9 @@ const App = () => {
     setGameData({
       word: selectedWord,
       hint: selectedHint,
-      playerRoles: roles
+      playerRoles: roles,
+      starterIndex
     });
-    setCurrentRound(1);
     setGameState('DISTRIBUTION');
   };
 
@@ -315,7 +354,7 @@ const App = () => {
         <p style={{ color: 'var(--text-muted)' }}>Sırayla ismine tıklayıp kelimeni gizlice oku!</p>
       </header>
 
-      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, alignContent: 'start' }}>
+      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, alignContent: 'start' }}>
         {gameData.playerRoles.map((p, i) => (
           <motion.div
             key={i}
@@ -394,55 +433,73 @@ const App = () => {
   // ---------------------------------------------------------
   // 5. GAME PLAY
   // ---------------------------------------------------------
-  const renderGamePlay = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="container"
-    >
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-        <div style={{ position: 'relative', marginBottom: 24 }}>
-          <div style={{ background: 'rgba(99, 102, 241, 0.1)', border: '1px solid var(--primary)', padding: '4px 12px', borderRadius: 20, color: 'var(--primary)', fontSize: '0.8rem', fontWeight: 'bold', marginBottom: 16 }}>
-            TUR {currentRound} / 3
+  const renderGamePlay = () => {
+    const roles = gameData.playerRoles ?? [];
+    const safeStarterIndex = roles.length ? ((gameData.starterIndex % roles.length) + roles.length) % roles.length : 0;
+    const order = roles.length ? roles.slice(safeStarterIndex).concat(roles.slice(0, safeStarterIndex)).map((p) => p.name) : [];
+
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="container"
+      >
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+          <div style={{ position: 'relative', marginBottom: 24 }}>
+            <div className="pulse" style={{ position: 'absolute', inset: -20, background: 'var(--primary)', borderRadius: '50%', opacity: 0.1 }}></div>
+            <Gamepad2 size={60} color="var(--primary)" />
           </div>
-          <div className="pulse" style={{ position: 'absolute', inset: -20, background: 'var(--primary)', borderRadius: '50%', opacity: 0.1 }}></div>
-          <Gamepad2 size={60} color="var(--primary)" />
+
+          <h2 style={{ fontSize: '2rem', marginBottom: 12 }}>Tartışma Zamanı</h2>
+
+          <div className="glass" style={{ padding: 20, width: '100%', marginBottom: 14 }}>
+            <p style={{ fontSize: '1.1rem', lineHeight: 1.6 }}>
+              Herkes sırayla <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>"{currentCategory}"</span> kategorisindeki kelimeyi anlatıyor.
+            </p>
+            <div style={{ marginTop: 10, fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+              İlk başlayan: <span style={{ color: 'white', fontWeight: 600 }}>{order[0] ?? '-'}</span>
+            </div>
+          </div>
+
+          <div className="glass" style={{ padding: 14, width: '100%', marginBottom: 14 }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 10 }}>Konuşma sırası</div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+              {order.map((name, idx) => (
+                <div
+                  key={`${name}-${idx}`}
+                  style={{
+                    padding: '8px 10px',
+                    borderRadius: 999,
+                    background: idx === 0 ? 'rgba(99, 102, 241, 0.18)' : 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    fontSize: '0.9rem',
+                    fontWeight: 600,
+                    color: 'white'
+                  }}
+                >
+                  {name}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ background: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.1)', padding: 12, borderRadius: 16, width: '100%' }}>
+            <p style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center', fontSize: '0.9rem' }}>
+              <Skull size={14} color="#ef4444" />
+              <span>İçinizde <span style={{ color: '#ef4444', fontWeight: 'bold' }}>{imposterCount}</span> sahtekar var!</span>
+            </p>
+          </div>
         </div>
 
-        <h2 style={{ fontSize: '2rem', marginBottom: 12 }}>Sıra Sizde!</h2>
-        <div className="glass" style={{ padding: 20, width: '100%', marginBottom: 20 }}>
-          <p style={{ fontSize: '1.1rem', lineHeight: 1.6 }}>
-            Herkes sırayla <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>"{currentCategory}"</span> kategorisindeki kelimeyi anlatıyor.
-          </p>
-          <div style={{ marginTop: 12, fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-            {currentRound < 3
-              ? "Herkes kelimesini söyledikten sonra 'Sonraki Tur' butonuna basın."
-              : "Bu son tur! Tartışıp sahtekarı bulmaya çalışın."}
-          </div>
-        </div>
-        
-        <div style={{ background: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.1)', padding: 12, borderRadius: 16, width: '100%' }}>
-          <p style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center', fontSize: '0.9rem' }}>
-            <Skull size={14} color="#ef4444" />
-            <span>İçinizde <span style={{ color: '#ef4444', fontWeight: 'bold' }}>{imposterCount}</span> sahtekar var!</span>
-          </p>
-        </div>
-      </div>
-
-      <div style={{ display: 'flex', gap: 12, marginBottom: 20, width: '100%' }}>
-        {currentRound < 3 ? (
-          <button className="btn-primary" style={{ width: '100%' }} onClick={() => setCurrentRound(prev => prev + 1)}>
-            Sonraki Tur
-          </button>
-        ) : (
+        <div style={{ display: 'flex', gap: 12, marginBottom: 20, width: '100%' }}>
           <button className="btn-primary" style={{ width: '100%', background: '#ef4444' }} onClick={() => setGameState('RESULT')}>
-            Oyunu Bitir & Kimlikleri Açıkla
+            Kimlikleri Açıkla
           </button>
-        )}
-      </div>
-    </motion.div>
-  );
+        </div>
+      </motion.div>
+    );
+  };
 
   // ---------------------------------------------------------
   // 6. RESULT
@@ -484,7 +541,7 @@ const App = () => {
   );
 
   return (
-    <div style={{ position: 'relative', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ position: 'relative', minHeight: '100dvh', height: '100dvh', display: 'flex', flexDirection: 'column' }}>
       <AnimatePresence mode="wait">
         {gameState === 'HOME' && renderHome()}
         {gameState === 'SETUP_PLAYERS' && renderSetupPlayers()}

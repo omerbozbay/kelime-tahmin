@@ -1,4 +1,4 @@
-export const categories = {
+const rawCategories = {
   'Hayvanlar': [
     ['Aslan', 'Yele'],
     ['Kaplan', 'Çizgi'],
@@ -1484,109 +1484,109 @@ export const categories = {
   ].slice(0, 100),
 
   'Ülkeler': [
-    ['Türkiye', 'Ankara'],
-    ['Almanya', 'Berlin'],
-    ['Fransa', 'Paris'],
-    ['İtalya', 'Roma'],
-    ['İspanya', 'Madrid'],
-    ['Portekiz', 'Lizbon'],
-    ['BirleşikKrallık', 'Londra'],
-    ['İrlanda', 'Dublin'],
-    ['Hollanda', 'Amsterdam'],
-    ['Belçika', 'Brüksel'],
-    ['Lüksemburg', 'Lüksemburg'],
-    ['İsviçre', 'Bern'],
-    ['Avusturya', 'Viyana'],
-    ['Polonya', 'Varşova'],
-    ['Çekya', 'Prag'],
-    ['Macaristan', 'Budapeşte'],
-    ['Slovakya', 'Bratislava'],
-    ['Slovenya', 'Ljubljana'],
-    ['Hırvatistan', 'Zagreb'],
-    ['Sırbistan', 'Belgrad'],
-    ['BosnaHersek', 'Saraybosna'],
-    ['Karadağ', 'Podgorica'],
-    ['Arnavutluk', 'Tiran'],
-    ['KuzeyMakedonya', 'Üsküp'],
-    ['Yunanistan', 'Atina'],
-    ['Bulgaristan', 'Sofya'],
-    ['Romanya', 'Bükreş'],
-    ['Moldova', 'Kişinev'],
-    ['Ukrayna', 'Kiev'],
-    ['Rusya', 'Moskova'],
-    ['Belarus', 'Minsk'],
-    ['Litvanya', 'Vilnius'],
-    ['Letonya', 'Riga'],
-    ['Estonya', 'Tallinn'],
-    ['Norveç', 'Oslo'],
-    ['İsveç', 'Stockholm'],
-    ['Finlandiya', 'Helsinki'],
-    ['Danimarka', 'Kopenhag'],
-    ['İzlanda', 'Reykjavik'],
-    ['ABD', 'Washington'],
-    ['Kanada', 'Ottawa'],
-    ['Meksika', 'Meksiko'],
-    ['Küba', 'Havana'],
-    ['Brezilya', 'Brasilia'],
-    ['Arjantin', 'BuenosAires'],
-    ['Şili', 'Santiago'],
-    ['Peru', 'Lima'],
-    ['Kolombiya', 'Bogota'],
-    ['Venezuela', 'Caracas'],
-    ['Ekvador', 'Quito'],
-    ['Bolivya', 'LaPaz'],
-    ['Paraguay', 'Asuncion'],
-    ['Uruguay', 'Montevideo'],
-    ['Panama', 'Panama'],
-    ['KostaRika', 'SanJose'],
-    ['Guatemala', 'Guatemala'],
-    ['Dominik', 'SantoDomingo'],
-    ['Japonya', 'Tokyo'],
-    ['Çin', 'Pekin'],
-    ['GüneyKore', 'Seul'],
-    ['KuzeyKore', 'Pyongyang'],
-    ['Tayvan', 'Taipei'],
-    ['HongKong', 'Victoria'],
-    ['Moğolistan', 'UlanBatur'],
-    ['Hindistan', 'YeniDelhi'],
-    ['Pakistan', 'İslamabad'],
-    ['Bangladeş', 'Dakka'],
-    ['SriLanka', 'Kolombo'],
-    ['Nepal', 'Katmandu'],
-    ['Afganistan', 'Kabil'],
-    ['İran', 'Tahran'],
-    ['Irak', 'Bağdat'],
-    ['Suriye', 'Şam'],
-    ['Lübnan', 'Beyrut'],
-    ['İsrail', 'Kudüs'],
-    ['Filistin', 'Gazze'],
-    ['Ürdün', 'Amman'],
-    ['SuudiArabistan', 'Riyad'],
-    ['BAE', 'AbuDhabi'],
-    ['Katar', 'Doha'],
-    ['Kuveyt', 'Kuveyt'],
-    ['Umman', 'Maskat'],
-    ['Yemen', 'Sana'],
-    ['Mısır', 'Kahire'],
-    ['Libya', 'Trablus'],
-    ['Tunus', 'Tunus'],
-    ['Cezayir', 'Cezayir'],
-    ['Fas', 'Rabat'],
-    ['Sudan', 'Hartum'],
-    ['Etiyopya', 'AddisAbaba'],
-    ['Kenya', 'Nairobi'],
-    ['Tanzanya', 'Dodoma'],
-    ['Gana', 'Akra'],
-    ['Nijerya', 'Abuja'],
-    ['GüneyAfrika', 'Pretoria'],
-    ['Avustralya', 'Canberra'],
-    ['YeniZelanda', 'Wellington'],
-    ['Endonezya', 'Cakarta'],
-    ['Malezya', 'KualaLumpur'],
-    ['Singapur', 'Singapur'],
-    ['Tayland', 'Bangkok'],
-    ['Vietnam', 'Hanoi'],
-    ['Filipinler', 'Manila']
+    ['Türkiye', 'Anadolu'],
+    ['Almanya', 'Bira'],
+    ['Fransa', 'Kruvasan'],
+    ['İtalya', 'Makarna'],
+    ['İspanya', 'Flamenko'],
+    ['Portekiz', 'Fado'],
+    ['BirleşikKrallık', 'Sis'],
+    ['İrlanda', 'Yonca'],
+    ['Hollanda', 'Lale'],
+    ['Belçika', 'Waffle'],
+    ['Lüksemburg', 'Banka'],
+    ['İsviçre', 'Saat'],
+    ['Avusturya', 'Vals'],
+    ['Polonya', 'Pierogi'],
+    ['Çekya', 'Pilsner'],
+    ['Macaristan', 'Gulaş'],
+    ['Slovakya', 'Tatra'],
+    ['Slovenya', 'Alpler'],
+    ['Hırvatistan', 'Adriyatik'],
+    ['Sırbistan', 'Rakija'],
+    ['BosnaHersek', 'Sevdah'],
+    ['Karadağ', 'Kotor'],
+    ['Arnavutluk', 'Kartal'],
+    ['KuzeyMakedonya', 'Ohrid'],
+    ['Yunanistan', 'Zeytin'],
+    ['Bulgaristan', 'Gül'],
+    ['Romanya', 'Drakula'],
+    ['Moldova', 'Şarap'],
+    ['Ukrayna', 'Ayçiçek'],
+    ['Rusya', 'Vodka'],
+    ['Belarus', 'Traktör'],
+    ['Litvanya', 'Kehribar'],
+    ['Letonya', 'Baltık'],
+    ['Estonya', 'Dijital'],
+    ['Norveç', 'Fjord'],
+    ['İsveç', 'IKEA'],
+    ['Finlandiya', 'Sauna'],
+    ['Danimarka', 'LEGO'],
+    ['İzlanda', 'Gayzer'],
+    ['ABD', 'Özgürlük'],
+    ['Kanada', 'Akçaağaç'],
+    ['Meksika', 'Taco'],
+    ['Küba', 'Puro'],
+    ['Brezilya', 'Samba'],
+    ['Arjantin', 'Tango'],
+    ['Şili', 'And'],
+    ['Peru', 'İnka'],
+    ['Kolombiya', 'Kahve'],
+    ['Venezuela', 'Petrol'],
+    ['Ekvador', 'Galapagos'],
+    ['Bolivya', 'Titicaca'],
+    ['Paraguay', 'Guarani'],
+    ['Uruguay', 'Mate'],
+    ['Panama', 'Kanal'],
+    ['KostaRika', 'Tropik'],
+    ['Guatemala', 'Maya'],
+    ['Dominik', 'Merengue'],
+    ['Japonya', 'Samuray'],
+    ['Çin', 'Sedd'],
+    ['GüneyKore', 'Kpop'],
+    ['KuzeyKore', 'Kapalı'],
+    ['Tayvan', 'Çip'],
+    ['HongKong', 'Gökdelen'],
+    ['Moğolistan', 'Bozkır'],
+    ['Hindistan', 'Baharat'],
+    ['Pakistan', 'Keşmir'],
+    ['Bangladeş', 'Muson'],
+    ['SriLanka', 'Çay'],
+    ['Nepal', 'Himalaya'],
+    ['Afganistan', 'Halı'],
+    ['İran', 'Pers'],
+    ['Irak', 'Mezopotamya'],
+    ['Suriye', 'Levant'],
+    ['Lübnan', 'Sedir'],
+    ['İsrail', 'Kosher'],
+    ['Filistin', 'Zeytin'],
+    ['Ürdün', 'Petra'],
+    ['SuudiArabistan', 'Hac'],
+    ['BAE', 'Çöl'],
+    ['Katar', 'Gaz'],
+    ['Kuveyt', 'Petrol'],
+    ['Umman', 'Tütsü'],
+    ['Yemen', 'Kahve'],
+    ['Mısır', 'Firavun'],
+    ['Libya', 'Sahra'],
+    ['Tunus', 'Kartaca'],
+    ['Cezayir', 'Sahra'],
+    ['Fas', 'Berberi'],
+    ['Sudan', 'Nil'],
+    ['Etiyopya', 'Kahve'],
+    ['Kenya', 'Safari'],
+    ['Tanzanya', 'Kilimanjaro'],
+    ['Gana', 'Kakao'],
+    ['Nijerya', 'Nollywood'],
+    ['GüneyAfrika', 'Safari'],
+    ['Avustralya', 'Kanguru'],
+    ['YeniZelanda', 'Kivi'],
+    ['Endonezya', 'Bali'],
+    ['Malezya', 'Durian'],
+    ['Singapur', 'Merlion'],
+    ['Tayland', 'Tapınak'],
+    ['Vietnam', 'Pho'],
+    ['Filipinler', 'Adalar']
   ].slice(0, 100),
 
   'Şehirler': [
@@ -1699,3 +1699,199 @@ export const categories = {
     ['Rio', 'Karnaval']
   ].slice(0, 100)
 };
+
+const hintPools = {
+  'Hayvanlar': ['Habitat', 'İz', 'Refleks', 'Sezgi', 'Güdü', 'Ritim', 'Silüet', 'Doğa', 'Denge', 'Gölge', 'Rota', 'Doku', 'Tepki', 'Arayış', 'Sezon', 'Bölge', 'Uyum', 'Taktik', 'Koku', 'Ses'],
+  'Yiyecekler': ['Sofra', 'Aroma', 'Tat', 'Damak', 'Rutin', 'Öğün', 'Kıvam', 'Koku', 'Menü', 'Tarif', 'Seçim', 'Alışkanlık', 'Sunum', 'Kültür', 'Porsiyon', 'Renk', 'Doku', 'Kıtır', 'Serinlik', 'Sıcaklık'],
+  'Nesneler': ['Günlük', 'İşlev', 'Düzen', 'Konfor', 'Malzeme', 'Bağlantı', 'Detay', 'Rutin', 'Bakım', 'Taşıma', 'Kurulum', 'Kullanım', 'Erişim', 'Güvenlik', 'Alan', 'Şekil', 'Doku', 'Ağırlık', 'Tasarım', 'Uygulama'],
+  'Film/Dizi': ['Tür', 'Atmosfer', 'Final', 'Replik', 'Sürpriz', 'Tempo', 'Gerilim', 'Dram', 'Komedi', 'Macera', 'Ekip', 'Çatışma', 'Yüzleşme', 'Kader', 'Dönüm', 'Kurgu', 'Ritim', 'Sahne', 'Rol', 'Evren'],
+  'Mekanlar': ['Buluşma', 'Geçiş', 'Bekleme', 'Manzara', 'Rota', 'Merkez', 'Kenar', 'Hareket', 'Dinlenme', 'Kalabalık', 'Sessizlik', 'Gürültü', 'Işık', 'Gölge', 'Rüzgar', 'Sıcaklık', 'Serinlik', 'Koku', 'Doku', 'Zaman'],
+  'Sporlar': ['Tempo', 'Efor', 'Ritim', 'Rekabet', 'Strateji', 'Denge', 'Refleks', 'Skor', 'Set', 'Tur', 'Final', 'Kupa', 'Antrenman', 'Dayanıklılık', 'Çeviklik', 'Hız', 'Güç', 'Teknik', 'Taktik', 'Disiplin'],
+  'Meslekler': ['Sorumluluk', 'Beceri', 'Ustalık', 'İletişim', 'Plan', 'Rutin', 'Çözüm', 'Takım', 'Evrak', 'Takip', 'Hizmet', 'Deneyim', 'Uzmanlık', 'Dikkat', 'İşlem', 'Rapor', 'Ekip', 'Süreç', 'Düzen', 'Kalite'],
+  'Markalar': ['Kalite', 'Trend', 'Tasarım', 'Seri', 'Model', 'Logo', 'Paket', 'Garanti', 'Servis', 'Kampanya', 'Global', 'Uygun', 'Lüks', 'Seçim', 'Alışkanlık', 'Reklam', 'Vitrin', 'Yenilik', 'Stil', 'Pazar'],
+  'Araçlar': ['Rota', 'Mesafe', 'Hız', 'Denge', 'Yakıt', 'Konfor', 'Güvenlik', 'Yük', 'Trafik', 'Durak', 'Peron', 'Rüzgar', 'Dalgalar', 'Kalkış', 'İniş', 'Viraj', 'Sürüş', 'Seyahat', 'Hareket', 'Çekiş'],
+  'Süper Güçler': ['Enerji', 'Aura', 'Zihin', 'Element', 'Dönüşüm', 'Kader', 'İllüzyon', 'Portal', 'Gravite', 'Faz', 'Kalkan', 'Patlama', 'Gölge', 'Işık', 'Zaman', 'Mekan', 'Rejenerasyon', 'Telepati', 'Astral', 'Totem'],
+  'Korkular': ['Kaygı', 'Panik', 'Gerilim', 'Kaçış', 'Daralma', 'Nefes', 'Yalnızlık', 'Tedirgin', 'Titreme', 'Sessizlik', 'Gürültü', 'Belirsiz', 'Endişe', 'Soğuk', 'Karanlık', 'Şok', 'Utanç', 'Sonsuz', 'Çaresiz', 'Risk'],
+  'Ünlüler': ['Gündem', 'Sahne', 'Başarı', 'Ödül', 'Rekor', 'Trend', 'Viral', 'İmza', 'Rol', 'Albüm', 'Konser', 'Turne', 'Takip', 'Magazin', 'Kulüp', 'Milli', 'Ekip', 'Yapım', 'Çıkış', 'Marka'],
+  'Oyunlar': ['Seviye', 'Görev', 'Harita', 'Arena', 'Takım', 'Klan', 'Rank', 'Turnuva', 'Build', 'Loot', 'Boss', 'Strateji', 'Aksiyon', 'Macera', 'Korku', 'Bulmaca', 'Rekabet', 'Match', 'Hedef', 'Tempo'],
+  'Hobiler': ['Keyif', 'Rutin', 'Uğraş', 'Beceri', 'Keşif', 'Üretim', 'Gelişim', 'Deneme', 'Tutku', 'Huzur', 'Dışarı', 'Ev', 'Doğa', 'Ekipman', 'Detay', 'Ritim', 'Stil', 'Zaman', 'Enerji', 'Odak'],
+  'Ülkeler': ['Kültür', 'Gelenek', 'Mutfak', 'Dil', 'Ritim', 'Tarih', 'Harita', 'İklim', 'Doğa', 'Festival', 'Sanat', 'Mimari', 'Lezzet', 'Pazar', 'Efsane', 'Renk', 'Koku', 'Ses', 'Şöhret', 'Yol'],
+  'Şehirler': ['Sahil', 'Trafik', 'Meydan', 'Çarşı', 'Lezzet', 'Rota', 'Kalabalık', 'Sessizlik', 'Rüzgar', 'Yağmur', 'Güneş', 'Manzara', 'Köprü', 'Kale', 'Liman', 'Park', 'Gece', 'Gündüz', 'Merkez', 'Yokuş']
+};
+
+const setOf = (arr) => new Set(arr);
+
+const hintGroups = {
+  'Hayvanlar': [
+    { words: setOf(['Yunus', 'Köpekbalığı', 'Balina', 'Ahtapot', 'Yengeç', 'Istakoz', 'Karides', 'Somon', 'Hamsi', 'Levrek', 'Kılıçbalığı', 'Denizanası', 'Denizatı', 'Fok', 'Mors']), hints: ['Derinlik', 'Akıntı', 'Tuzluluk', 'Kıyı', 'Dalgalar'] },
+    { words: setOf(['Kartal', 'Şahin', 'Baykuş', 'Güvercin', 'Serçe', 'Karga', 'Papağan', 'Flamingo', 'Leylek', 'Turna', 'PeçeliBaykuş']), hints: ['Gökyüzü', 'Uzaklık', 'Yükseklik', 'Göç', 'Hassasiyet'] },
+    { words: setOf(['Tavuk', 'Horoz', 'Hindi', 'Ördek', 'Kaz', 'Koyun', 'Keçi', 'İnek', 'Boğa', 'At', 'Eşek', 'Deve', 'Lama', 'Domuz']), hints: ['Çiftlik', 'Sürü', 'Yem', 'Ahır', 'Kırsal'] },
+    { words: setOf(['Kertenkele', 'Bukalemun', 'İguana', 'Yılan', 'Kobra', 'Piton', 'Kaplumbağa', 'Kurbağa', 'Semender', 'Timsah', 'Aligator']), hints: ['Soğukkanlı', 'Nem', 'Bataklık', 'Sürünüş', 'Dikkat'] },
+    { words: setOf(['BalArısı', 'EşekArısı', 'Karınca', 'UğurBöceği', 'Kelebek', 'Güve', 'Sivrisinek', 'Sinek', 'Örümcek', 'Akrep', 'Kene', 'Solucan', 'Salyangoz']), hints: ['Minik', 'Koloni', 'İzlek', 'Titreşim', 'Dolaşım'] },
+    { words: setOf(['Penguen', 'KutupAyısı', 'RenGeyiği']), hints: ['Buzul', 'Ayaz', 'Kutup', 'Kırağı', 'Soğukluk'] }
+  ],
+  'Yiyecekler': [
+    { words: setOf(['Elma', 'Armut', 'Muz', 'Portakal', 'Mandalina', 'Greyfurt', 'Çilek', 'Kiraz', 'Vişne', 'Üzüm', 'Kavun', 'Karpuz', 'Şeftali', 'Kayısı', 'Erik', 'İncir', 'Nar', 'Hurma', 'Ananas', 'Kivi', 'Limon', 'Zeytin']), hints: ['Mevsim', 'Dal', 'Tazelik', 'Aroma', 'Bahçe'] },
+    { words: setOf(['Domates', 'Salatalık', 'Biber', 'Patlıcan', 'Patates', 'Soğan', 'Sarımsak', 'Havuç', 'Marul', 'Ispanak', 'Brokoli', 'Karnabahar', 'Pırasa', 'Kabak', 'Mantar', 'Mercimek', 'Nohut', 'Fasulye']), hints: ['Pazar', 'Tarla', 'Doğrama', 'Tencere', 'Yeşillik'] },
+    { words: setOf(['Baklava', 'Künefe', 'Kadayıf', 'Lokum', 'Sütlaç', 'Kazandibi', 'Profiterol', 'Waffle', 'Kek', 'Pasta', 'Kurabiye', 'Dondurma', 'Çikolata', 'Şeker', 'Bal', 'Reçel']), hints: ['Kutlama', 'Şekerleme', 'Şerbet', 'Krema', 'Fırın'] },
+    { words: setOf(['Çay', 'Kahve', 'Gazoz', 'Kola', 'Limonata', 'Şalgam', 'Boza', 'Ayran', 'Süt']), hints: ['Yudum', 'Bardak', 'Dem', 'Serinlik', 'Köpük'] },
+    { words: setOf(['Pizza', 'Hamburger', 'Lahmacun', 'Döner', 'İskender', 'AdanaKebap', 'UrfaKebap', 'Köfte', 'Mantı', 'Börek', 'SuBöreği', 'Gözleme', 'Menemen', 'Sucuk', 'Pastırma', 'Kavurma', 'KuruFasulye']), hints: ['Lokanta', 'Doyum', 'Baharat', 'Tava', 'Izgara'] },
+    { words: setOf(['Ekmek', 'Simit', 'Pide', 'Makarna', 'Pirinç', 'Bulgur']), hints: ['Hamur', 'Kıvam', 'Öğün', 'Gelenek', 'Paylaşım'] }
+  ],
+  'Nesneler': [
+    { words: setOf(['Telefon', 'Bilgisayar', 'Tablet', 'Televizyon', 'Kumanda', 'Kulaklık', 'Hoparlör', 'ŞarjAleti', 'Powerbank', 'Modem', 'Router', 'Kamera', 'Tripod', 'Mikrofon']), hints: ['Bağlantı', 'Ekran', 'Sinyal', 'Kayıt', 'Şarj'] },
+    { words: setOf(['Buzdolabı', 'Fırın', 'Mikrodalga', 'Ocak', 'Tencere', 'Tava', 'Çatal', 'Kaşık', 'Bıçak', 'Tabak', 'Bardak', 'Kupa', 'Sürahi', 'Termos', 'Çaydanlık', 'Kettle', 'KahveMakinesi', 'Blender', 'TostMakinesi', 'EkmekKızartma']), hints: ['Mutfak', 'Hazırlık', 'Kıvam', 'Servis', 'Sıcaklık'] },
+    { words: setOf(['Ütü', 'ÇamaşırMakinesi', 'KurutmaMakinesi', 'BulaşıkMakinesi', 'Süpürge', 'RobotSüpürge', 'Paspas', 'ÇöpKutusu', 'Poşet']), hints: ['Temizlik', 'Düzen', 'Bakım', 'Rutin', 'Hijyen'] },
+    { words: setOf(['Masa', 'Sandalye', 'Koltuk', 'Yatak', 'Yastık', 'Yorgan', 'Battaniye', 'Dolap', 'Askı', 'Ayna', 'Perde', 'Halı', 'Lamba', 'Avize']), hints: ['Konfor', 'Alan', 'Dekor', 'Yerleşim', 'Ev'] },
+    { words: setOf(['Musluk', 'DuşBaşlığı', 'Havlu', 'DişFırçası', 'Tarak', 'Makas', 'Cımbız', 'TırnakMakas']), hints: ['Bakım', 'Hijyen', 'Rutin', 'Ayna', 'Hazırlık'] },
+    { words: setOf(['Defter', 'Kalem', 'Kurşunkalem', 'Tükenmez', 'KeçeliKalem', 'Silgi', 'Cetvel', 'Yapıştırıcı', 'Zımba', 'Ataş', 'Dosya', 'Kitap', 'Gazete', 'Dergi', 'Harita', 'Pusula']), hints: ['Not', 'Düzen', 'Çizim', 'Arşiv', 'Okuma'] },
+    { words: setOf(['Saat', 'Bileklik', 'Yüzük', 'Kolye', 'Gözlük', 'GüneşGözlüğü', 'Şapka', 'Cüzdan', 'Kartlık', 'Çanta', 'SırtÇantası', 'Valiz', 'Şemsiye', 'Fener']), hints: ['Taşıma', 'Güvenlik', 'Stil', 'Günlük', 'Koruma'] }
+  ],
+  'Film/Dizi': [
+    { words: setOf(['Kurtlar Vadisi', 'Ezel', 'BehzatÇ', 'LeylaileMecnun', 'AvrupaYakası', 'YaprakDökümü', 'AşkıMemnu', 'Çukur', 'DirilişErtuğrul', 'MuhteşemYüzyıl', 'GenişAile', 'İşlerGüçler', 'KardeşPayı', 'Prens', 'Şahsiyet', 'Masum', 'Atiye', 'BirBaşkadı', 'Fatmagül', 'Medcezir']), hints: ['Entrika', 'Mahalle', 'Dram', 'Sır', 'Yüzleşme'] },
+    { words: setOf(['BreakingBad', 'BetterCallSaul', 'GameofThrones', 'TheWitcher', 'StrangerThings', 'Friends', 'TheOffice', 'HowIMetYourMother', 'Sherlock', 'Dark', 'MoneyHeist', 'Narcos', 'PeakyBlinders', 'Vikings', 'TheWalkingDead', 'Lost', 'HouseMD', 'BlackMirror', 'TheBoys', 'Wednesday', 'SquidGame', 'Chernobyl', 'TheMandolorian', 'Loki', 'Daredevil']), hints: ['Sezon', 'Final', 'Gizem', 'Gerilim', 'Ekip'] },
+    { words: setOf(['TheLionKing', 'ToyStory', 'FindingNemo', 'Up', 'Coco', 'InsideOut', 'Shrek', 'KungFuPanda', 'Madagascar', 'IceAge']), hints: ['Dostluk', 'Macera', 'Renk', 'Kahkaha', 'Duygu'] },
+    { words: setOf(['Avengers', 'IronMan', 'SpiderMan', 'DoctorStrange', 'StarWars', 'TheLordoftheRings', 'HarryPotter', 'TheDarkKnight', 'Joker']), hints: ['Evren', 'Kahraman', 'Maske', 'Güç', 'Çatışma'] },
+    { words: setOf(['Vizontele', 'GORA', 'Arog', 'Recepİvedik', 'DüğünDernek', 'HababamSınıfı', 'TosunPaşa', 'SütKardeşler', 'NeşeliGünler', 'Organizeİşler', 'KarakomikFilmler', 'Hokkabaz']), hints: ['Replik', 'Kült', 'Absürt', 'Kahkaha', 'Şaka'] },
+    { words: setOf(['Siccin', 'Se7en', 'Oldboy', 'Parasite', 'Outlast']), hints: ['Tedirgin', 'Karanlık', 'Gerilim', 'Sessizlik', 'Lanet'] }
+  ],
+  'Mekanlar': [
+    { words: setOf(['Okul', 'Anaokulu', 'Üniversite', 'Kütüphane']), hints: ['Eğitim', 'Sıra', 'Zihin', 'Sessizlik', 'Not'] },
+    { words: setOf(['Hastane', 'Eczane', 'Poliklinik', 'Dişçi']), hints: ['Sağlık', 'Randevu', 'Bekleme', 'Tedavi', 'Dikkat'] },
+    { words: setOf(['Market', 'Bakkal', 'Manav', 'Kasap', 'Fırın', 'Pastane', 'Restoran', 'Kafe', 'ÇayBahçesi', 'Bar']), hints: ['Alışveriş', 'Koku', 'Menü', 'Porsiyon', 'Buluşma'] },
+    { words: setOf(['Havaalanı', 'Otogar', 'TrenGarı', 'Metroİstasyonu', 'Durak', 'Köprü', 'Tünel', 'Liman']), hints: ['Ulaşım', 'Rota', 'Geçiş', 'Bekleme', 'Hareket'] },
+    { words: setOf(['Park', 'Bahçe', 'Orman', 'Dağ', 'Göl', 'Nehir', 'Plaj', 'Koy']), hints: ['Doğa', 'Manzara', 'Rüzgar', 'Sessizlik', 'Serinlik'] },
+    { words: setOf(['Sinema', 'Tiyatro', 'KonserSalonu', 'Müze', 'Galeri', 'Lunapark', 'Aquapark']), hints: ['Eğlence', 'Sahne', 'Renk', 'Kalabalık', 'Anı'] },
+    { words: setOf(['AVM', 'Mağaza', 'Çarşı', 'KapalıÇarşı', 'PazarYeri']), hints: ['Vitrin', 'Kalabalık', 'Seçim', 'Pazarlık', 'Rota'] }
+  ],
+  'Sporlar': [
+    { words: setOf(['Futbol', 'Basketbol', 'Voleybol', 'Hentbol', 'Ragbi', 'AmerikanFutbolu', 'Beyzbol', 'Softbol']), hints: ['Takım', 'Skor', 'Tempo', 'Tribün', 'Final'] },
+    { words: setOf(['Boks', 'KickBoks', 'MuayThai', 'MMA', 'Güreş', 'Judo', 'Karate', 'Tekvando', 'Aikido', 'Eskrim']), hints: ['Düello', 'Disiplin', 'Refleks', 'Teknik', 'Ring'] },
+    { words: setOf(['Yüzme', 'SuTopu', 'ArtistikYüzme', 'Dalış', 'SerbestDalış', 'Sörf', 'Windsurf', 'Kitesurf', 'Yelken', 'Kano']), hints: ['Nefes', 'Dalgalar', 'Akıntı', 'Denge', 'Kulaç'] },
+    { words: setOf(['Kayak', 'Snowboard', 'BuzPateni', 'BuzHokeyi']), hints: ['Ayaz', 'Kaygan', 'Denge', 'Hız', 'Buzul'] },
+    { words: setOf(['Atletizm', 'Koşu', 'Maraton', 'Yürüyüş', 'UzunAtlama', 'YüksekAtlama', 'SırıklaAtlama', 'GülleAtma', 'DiskAtma', 'CiritAtma']), hints: ['Pist', 'Efor', 'Hız', 'Dayanıklılık', 'Rekor'] },
+    { words: setOf(['Satranç', 'GoOyunu', 'Tavla', 'Okey', 'Briç', 'Dart', 'Bilardo', 'Snooker', 'Bowling']), hints: ['Strateji', 'Odak', 'Hamle', 'Sabır', 'Zeka'] },
+    { words: setOf(['Espor', 'LoL', 'CS2', 'Valorant', 'Dota2', 'Overwatch', 'RocketLeague', 'PUBG', 'Fortnite', 'ApexLegends']), hints: ['Rank', 'Match', 'Takım', 'Hedef', 'Turnuva'] }
+  ],
+  'Meslekler': [
+    { words: setOf(['Doktor', 'Hemşire', 'DişHekimi', 'Eczacı', 'Veteriner', 'Psikolog', 'Fizyoterapist', 'Diyetisyen', 'Paramedik', 'Cerrah']), hints: ['Sağlık', 'Tedavi', 'Randevu', 'Teşhis', 'Bakım'] },
+    { words: setOf(['Öğretmen', 'OkulMüdürü', 'Akademisyen']), hints: ['Eğitim', 'Not', 'Sınav', 'Ders', 'Anlatım'] },
+    { words: setOf(['Mühendis', 'Yazılımcı', 'VeriBilimci', 'SistemYöneticisi', 'SiberGüvenlik', 'Tasarımcı', 'Grafiker', 'Mimar', 'İçMimar']), hints: ['Proje', 'Plan', 'Tasarım', 'Çözüm', 'Detay'] },
+    { words: setOf(['Hakim', 'Savcı', 'Avukat', 'Noter']), hints: ['Hukuk', 'Karar', 'Evrak', 'İmza', 'Duruşma'] },
+    { words: setOf(['Garson', 'Barista', 'Aşçı', 'Pastacı', 'Fırıncı', 'Kasap']), hints: ['Hizmet', 'Lezzet', 'Mutfak', 'Servis', 'Rutin'] },
+    { words: setOf(['Şoför', 'Taksici', 'Pilot', 'Hostes', 'Kaptan', 'TrenMakinisti', 'Kuryeci', 'KargoGörevlisi']), hints: ['Ulaşım', 'Rota', 'Zamanlama', 'Teslimat', 'Seyahat'] },
+    { words: setOf(['Gazeteci', 'Muhabir', 'Editör', 'Yazar', 'Şair', 'Fotoğrafçı', 'Kameraman', 'Sunucu', 'Oyuncu', 'Yönetmen', 'Senarist', 'Müzisyen', 'Şarkıcı', 'DJ', 'Ressam', 'Heykeltıraş']), hints: ['Sahne', 'Kamera', 'Metin', 'Kurgu', 'Yaratım'] },
+    { words: setOf(['Marangoz', 'Elektrikçi', 'Tesisatçı', 'Boyacı', 'Kaynakçı', 'Tornacı', 'CNCOperatörü', 'Otomotivci', 'Lastikçi', 'Kaportacı', 'İnşaatUstası']), hints: ['Atölye', 'Usta', 'Onarım', 'Malzeme', 'Dikkat'] }
+  ],
+  'Markalar': [
+    { words: setOf(['Apple', 'Samsung', 'Xiaomi', 'Huawei', 'Oppo', 'Vivo', 'Nokia', 'Sony', 'LG', 'Google', 'Microsoft', 'Intel', 'AMD', 'Nvidia', 'Asus', 'Acer', 'Lenovo', 'HP', 'Dell', 'Canon', 'Nikon', 'GoPro']), hints: ['Teknoloji', 'Yenilik', 'Ekran', 'Çip', 'Bağlantı'] },
+    { words: setOf(['Trendyol', 'Hepsiburada', 'Amazon', 'N11', 'Getir', 'Yemeksepeti', 'Migros', 'CarrefourSA', 'A101', 'BİM', 'Şok', 'Teknosa', 'MediaMarkt', 'Koçtaş', 'Ikea', 'Boyner']), hints: ['Sepet', 'Sipariş', 'İndirim', 'Kargo', 'Vitrin'] },
+    { words: setOf(['CocaCola', 'Pepsi', 'Fanta', 'Sprite', 'RedBull', 'Monster', 'Nescafe', 'Starbucks', 'Jacobs', 'Lipton', 'Çaykur', 'Eti', 'Ülker', 'Torku', 'Pınar', 'Sütaş', 'Danone', 'Nutella']), hints: ['Aroma', 'Tat', 'Alışkanlık', 'Serinlik', 'Sofra'] },
+    { words: setOf(['Nike', 'Adidas', 'Puma', 'Reebok', 'UnderArmour', 'NewBalance', 'Converse', 'Vans', 'Lacoste', 'TommyHilfiger', 'Levis', 'Zara', 'Bershka', 'PullBear', 'Mavi', 'LCWaikiki', 'Koton', 'DeFacto', 'Armani', 'Gucci', 'Prada', 'Chanel', 'Dior']), hints: ['Stil', 'Trend', 'Kumaş', 'Koleksiyon', 'Vitrin'] },
+    { words: setOf(['Toyota', 'Tesla']), hints: ['Yol', 'Konfor', 'Tasarım', 'Performans', 'Motor'] },
+    { words: setOf(['Colgate', 'Sensodyne', 'HeadShoulders', 'Pantene', 'Dove', 'Nivea', 'LOréal', 'Maybelline', 'Garnier', 'Gillette']), hints: ['Bakım', 'Rutin', 'Koku', 'Cilt', 'Stil'] }
+  ],
+  'Araçlar': [
+    { words: setOf(['Uçak', 'Jet', 'Helikopter', 'Zeplin', 'Balon', 'HavaGemisi', 'Planör', 'Drone', 'SavaşUçağı']), hints: ['Kalkış', 'İniş', 'Rüzgar', 'Yükseklik', 'Uçuş'] },
+    { words: setOf(['Gemi', 'Feribot', 'Vapur', 'Yat', 'Tekne', 'Kano', 'Kayık', 'Denizaltı', 'Sandal', 'Jetski', 'SüratTeknesi', 'Yelkenli', 'KargoGemisi', 'BalıkçıTeknesi', 'BuzKıran']), hints: ['Dalgalar', 'Kıyı', 'Akıntı', 'Liman', 'Tuzluluk'] },
+    { words: setOf(['Tren', 'Metro', 'Tramvay', 'Teleferik', 'Otobüs', 'Minibüs', 'Dolmuş', 'Servis', 'Taksi']), hints: ['Durak', 'Peron', 'Rota', 'Trafik', 'Hat'] },
+    { words: setOf(['Araba', 'Sedan', 'Hatchback', 'SUV', 'Crossover', 'PickUp', 'Jeep', 'Limuzin', 'YarışArabası', 'RalliArabası', 'Kart', 'Formula', 'Bisiklet', 'DağBisikleti', 'YolBisikleti', 'ElektrikliBisiklet', 'Scooter', 'ElektrikliScooter', 'Motosiklet', 'ScooterMotor', 'Chopper', 'ATV', 'Buggy']), hints: ['Sürüş', 'Viraj', 'Hız', 'Denge', 'Rota'] },
+    { words: setOf(['Kamyon', 'Tır', 'Dorse', 'Römork', 'Traktör', 'Biçerdöver', 'Greyder', 'Buldozer', 'Ekskavatör', 'Forklift', 'Vinç', 'BetonMikseri', 'BetonPompası', 'Kepçe', 'Çekici', 'KarKüreme', 'ÇöpKamyonu', 'SütTankeri', 'AkaryakıtTankeri']), hints: ['Yük', 'Şantiye', 'Güç', 'Süreç', 'Taşıma'] },
+    { words: setOf(['Ambulans', 'İtfaiye', 'PolisArabası']), hints: ['Siren', 'Acil', 'Güvenlik', 'Müdahale', 'Hız'] }
+  ],
+  'Süper Güçler': [
+    { words: setOf(['ZihinOkuma', 'Telekinezi', 'ZihinKontrolü', 'HafızaOkuma', 'HafızaSilme', 'Hipnoz']), hints: ['Zihin', 'Sezgi', 'Kontrol', 'Baskı', 'Algı'] },
+    { words: setOf(['AteşBükme', 'SuBükme', 'ToprakBükme', 'HavaBükme', 'BuzKontrolü', 'ElektrikKontrolü', 'Manyetizma', 'MetalBükme', 'KumKontrolü']), hints: ['Element', 'Doğa', 'Denge', 'Akış', 'Fırtına'] },
+    { words: setOf(['ZamanDurdurma', 'ZamanYolculuğu', 'GeleceğiGörme', 'Işınlanma', 'BoyutKapısı', 'BoyutDeğiştirme', 'YerçekimiKontrolü']), hints: ['Zaman', 'Mekan', 'Portal', 'Gravite', 'Anomali'] },
+    { words: setOf(['SüperHız', 'SüperGüç', 'Hızlıİyileşme', 'Ölümsüzlük', 'SüperSıçrama', 'SüperDenge', 'Süperİşitme', 'SüperKoku']), hints: ['Beden', 'Sınır', 'Refleks', 'Dayanım', 'Enerji'] },
+    { words: setOf(['Görünmezlik', 'GölgeKontrolü', 'HayaletOlma', 'DuvarGeçme', 'GörünmezZırh']), hints: ['Gölge', 'Sessiz', 'Faz', 'Kamufle', 'Belirsiz'] }
+  ],
+  'Korkular': [
+    { words: setOf(['SosyalFobi', 'Glossofobi', 'Erythrofobi', 'SahneKorkusu']), hints: ['Utanç', 'Baskı', 'Kalabalık', 'Gergin', 'Çekingen'] },
+    { words: setOf(['Arahnofobi', 'Ofidiyofobi', 'Kynofobi', 'Ailurofobi', 'Katsaridafobi', 'Entomofobi', 'Musofobi']), hints: ['Tehdit', 'Tedirgin', 'Kaçış', 'Refleks', 'Panik'] },
+    { words: setOf(['Akrofobi', 'Nyctofobi', 'Pirofobi', 'Hidrofobi', 'Brontofobi', 'Astraphobi', 'Chionofobi', 'Anemofobi']), hints: ['Kontrol', 'Belirsiz', 'Risk', 'Doğa', 'Sarsıntı'] },
+    { words: setOf(['Nosofobi', 'Mikrofobi', 'Germofobi', 'Trypanofobi', 'Dentofobi', 'Hematofobi']), hints: ['Kaygı', 'Korunma', 'Bulaş', 'Hassas', 'Tehlike'] },
+    { words: setOf(['Thanatofobi', 'Apirofobi', 'Monofobi', 'Necrofobi']), hints: ['Sonsuz', 'Yalnızlık', 'Karanlık', 'Endişe', 'Belirsiz'] }
+  ],
+  'Ünlüler': [
+    { words: setOf(['Tarkan', 'SezenAksu', 'AjdaPekkan', 'BarışManço', 'CemKaraca', 'Hadise', 'Edis', 'MabelMatiz', 'Sıla', 'Gülşen', 'FazılSay', 'İbrahimTatlıses', 'OrhanGencebay', 'FerdiTayfur', 'EbruGündeş', 'DemetAkalın', 'İremDerici', 'KenanDoğulu', 'MuratBoz']), hints: ['Sahne', 'Hit', 'Albüm', 'Konser', 'Vokal'] },
+    { words: setOf(['CemYılmaz', 'ŞahanGökbakar', 'AtaDemirer']), hints: ['Mizah', 'Replik', 'Kahkaha', 'Sahne', 'Kült'] },
+    { words: setOf(['BerenSaat', 'KıvançTatlıtuğ', 'Kenanİmirzalıoğlu', 'TubaBüyüküstün', 'HalukBilginer', 'ŞenerŞen', 'KemalSunal', 'TürkanŞoray', 'Kadirİnanır', 'TarıkAkan', 'MüjdeAr', 'NuriBilgeCeylan', 'EnginAltanDüzyatan', 'BurakÖzçivit', 'FahriyeEvcen', 'HandeErçel', 'KeremBürsin', 'CanYaman', 'DemetÖzdemir', 'LeonardoDiCaprio', 'BradPitt', 'AngelinaJolie', 'KeanuReeves', 'RobertDowneyJr']), hints: ['Rol', 'Kamera', 'Sahne', 'Karakter', 'Yapım'] },
+    { words: setOf(['CristianoRonaldo', 'LionelMessi', 'Neymar', 'KylianMbappe', 'Zlatanİbrahimović', 'LeBronJames', 'MichaelJordan', 'SerenaWilliams', 'RogerFederer', 'NovakDjokovic', 'UsainBolt', 'MichaelPhelps', 'ArdaTuran', 'HakanÇalhanoğlu', 'NaimSüleymanoğlu', 'TahaAkgül', 'MeteGazoz', 'FatihTerim']), hints: ['Rekor', 'Final', 'Kupa', 'Performans', 'Tempo'] },
+    { words: setOf(['ElonMusk', 'BillGates', 'SteveJobs', 'MarkZuckerberg', 'AzizSancar']), hints: ['Yenilik', 'Teknoloji', 'Vizyon', 'Başarı', 'İmza'] },
+    { words: setOf(['MustafaKemalAtatürk', 'RecepTayyipErdoğan', 'İlberOrtaylı', 'OrhanPamuk', 'YaşarKemal', 'NazımHikmet']), hints: ['Tarih', 'Gündem', 'Edebiyat', 'İmza', 'Başlık'] }
+  ],
+  'Oyunlar': [
+    { words: setOf(['Valorant', 'CS2', 'CallofDuty', 'Battlefield', 'RainbowSixSiege', 'ApexLegends', 'PUBG', 'Fortnite', 'Overwatch', 'TeamFortress2', 'Left4Dead']), hints: ['Hedef', 'Refleks', 'Match', 'Takım', 'Tempo'] },
+    { words: setOf(['LeagueofLegends', 'Dota2', 'MobileLegends']), hints: ['MOBA', 'Kule', 'Takım', 'Strateji', 'Rank'] },
+    { words: setOf(['Skyrim', 'EldenRing', 'TheWitcher3', 'GodofWar', 'AssassinsCreed', 'RedDeadRedemption2', 'GTA5', 'Cyberpunk2077', 'Fallout']), hints: ['Macera', 'Keşif', 'Evren', 'Görev', 'Yolculuk'] },
+    { words: setOf(['ResidentEvil', 'SilentHill', 'Outlast', 'Amnesia', 'Phasmophobia', 'LittleNightmares', 'FNAF']), hints: ['Gerilim', 'Karanlık', 'Tedirgin', 'Sessizlik', 'Kabus'] },
+    { words: setOf(['Tetris', 'CandyCrush', 'ClashofClans', 'ClashRoyale', 'BrawlStars', 'FallGuys', 'Roblox', 'Minecraft']), hints: ['Seviye', 'Bölüm', 'Ödül', 'Sabır', 'Rutin'] },
+    { words: setOf(['Monopoly', 'Scrabble', 'Tabu', 'Jenga', 'Uno', 'Catan', 'Risk', 'Battleship', 'Carcassonne', 'Chess']), hints: ['Tahta', 'Zar', 'Hamle', 'Strateji', 'Rekabet'] },
+    { words: setOf(['NeedforSpeed', 'ForzaHorizon', 'GranTurismo', 'MarioKart']), hints: ['Viraj', 'Hız', 'Pist', 'Rota', 'Rekabet'] },
+    { words: setOf(['Tekken', 'MortalKombat', 'StreetFighter', 'KingofFighters']), hints: ['Düello', 'Kombin', 'Refleks', 'Arena', 'Final'] }
+  ],
+  'Hobiler': [
+    { words: setOf(['Koşu', 'Yürüyüş', 'Bisiklet', 'Yüzme', 'Fitness', 'Crossfit', 'Dağcılık', 'Kamp', 'Kayak', 'Snowboard', 'Sörf', 'Dalış', 'Yelken', 'Kano', 'Skateboard', 'Paten', 'AtBinme', 'Okçuluk', 'Boks', 'KickBoks']), hints: ['Efor', 'Ritim', 'Doğa', 'Tempo', 'Disiplin'] },
+    { words: setOf(['ResimYapma', 'Fotoğrafçılık', 'VideoÇekimi', 'Montaj', 'MüzikDinleme', 'GitarÇalma', 'PiyanoÇalma', 'KemanÇalma', 'Bateri', 'ŞarkıSöyleme', 'Dans', 'Sinema', 'Tiyatro', 'Konser', 'Podcast']), hints: ['Yaratım', 'Ritim', 'Sahne', 'Duygu', 'İfade'] },
+    { words: setOf(['Elİşi', 'Örgü', 'Nakış', 'Dikiş', 'AhşapOyma', 'Seramik', 'Heykel', 'EbruSanatı', 'Origami', 'Kaligrafi', 'Grafiti']), hints: ['Atölye', 'Detay', 'Sabır', 'Malzeme', 'Ustalık'] },
+    { words: setOf(['Puzzle', 'Satranç', 'Tavla', 'Okey', 'Bulmaca', 'Sudoku', 'Scrabble', 'KutuOyunu', 'Dama']), hints: ['Odak', 'Hamle', 'Sabır', 'Zeka', 'Strateji'] },
+    { words: setOf(['Kodlama', 'Robotik', 'Elektronik', '3DYazıcı', 'Drone', 'Astronomi', 'Yıldızİzleme']), hints: ['Keşif', 'Devre', 'Yenilik', 'Deney', 'Merak'] },
+    { words: setOf(['YemekYapma', 'PastaYapma', 'KahveDemleme', 'ÇayDemleme']), hints: ['Tarif', 'Koku', 'Kıvam', 'Rutin', 'Lezzet'] }
+  ],
+  'Ülkeler': [
+    { words: setOf(['Almanya', 'Fransa', 'İtalya', 'İspanya', 'Portekiz', 'BirleşikKrallık', 'İrlanda', 'Hollanda', 'Belçika', 'Lüksemburg', 'İsviçre', 'Avusturya', 'Polonya', 'Çekya', 'Macaristan', 'Slovakya', 'Slovenya', 'Hırvatistan', 'Sırbistan', 'BosnaHersek', 'Karadağ', 'Arnavutluk', 'KuzeyMakedonya', 'Yunanistan', 'Bulgaristan', 'Romanya', 'Moldova', 'Ukrayna', 'Rusya', 'Belarus', 'Litvanya', 'Letonya', 'Estonya', 'Norveç', 'İsveç', 'Finlandiya', 'Danimarka', 'İzlanda']), hints: ['Avrupa', 'Tarih', 'Mimari', 'Kültür', 'Rota'] },
+    { words: setOf(['ABD', 'Kanada', 'Meksika', 'Küba', 'Brezilya', 'Arjantin', 'Şili', 'Peru', 'Kolombiya', 'Venezuela', 'Ekvador', 'Bolivya', 'Paraguay', 'Uruguay', 'Panama', 'KostaRika', 'Guatemala', 'Dominik']), hints: ['Amerika', 'Kıta', 'Ritim', 'Yol', 'Şehir'] },
+    { words: setOf(['Japonya', 'Çin', 'GüneyKore', 'KuzeyKore', 'Tayvan', 'HongKong', 'Moğolistan', 'Hindistan', 'Pakistan', 'Bangladeş', 'SriLanka', 'Nepal', 'Afganistan', 'İran', 'Irak', 'Suriye', 'Lübnan', 'İsrail', 'Filistin', 'Ürdün', 'SuudiArabistan', 'BAE', 'Katar', 'Kuveyt', 'Umman', 'Yemen', 'Endonezya', 'Malezya', 'Singapur', 'Tayland', 'Vietnam', 'Filipinler', 'Türkiye']), hints: ['Asya', 'Kültür', 'Baharat', 'Tarih', 'Kalabalık'] },
+    { words: setOf(['Mısır', 'Libya', 'Tunus', 'Cezayir', 'Fas', 'Sudan', 'Etiyopya', 'Kenya', 'Tanzanya', 'Gana', 'Nijerya', 'GüneyAfrika']), hints: ['Afrika', 'Güneş', 'Safari', 'Sahra', 'Ritim'] },
+    { words: setOf(['Avustralya', 'YeniZelanda']), hints: ['Okyanusya', 'Ada', 'Okyanus', 'Rüzgar', 'Uzaklık'] }
+  ],
+  'Şehirler': [
+    { words: setOf(['İstanbul', 'İzmir', 'Antalya', 'Mersin', 'Muğla', 'Aydın', 'Balıkesir', 'Çanakkale', 'Tekirdağ', 'Samsun', 'Ordu', 'Giresun', 'Trabzon', 'Rize', 'Bartın', 'Yalova', 'Alanya', 'Fethiye', 'Marmaris', 'Datça', 'Kaş', 'Didim', 'Çeşme', 'Foça', 'Ayvalık', 'Bodrum']), hints: ['Sahil', 'Rüzgar', 'Kıyı', 'Yazlık', 'Deniz'] },
+    { words: setOf(['Ankara', 'Konya', 'Kayseri', 'Eskişehir', 'Gaziantep', 'Şanlıurfa', 'Diyarbakır', 'Mardin', 'Erzurum', 'Van', 'Nevşehir', 'Denizli', 'Bursa', 'Edirne', 'Kars', 'Kahramanmaraş', 'Hatay', 'Adıyaman']), hints: ['Tarih', 'Lezzet', 'Merkez', 'Rota', 'Bozkır'] },
+    { words: setOf(['Londra', 'Paris', 'Roma', 'Barselona', 'Berlin', 'Amsterdam', 'Viyana', 'Prag', 'Budapeşte', 'Atina', 'NewYork', 'LosAngeles', 'Chicago', 'Miami', 'Tokyo', 'Seul', 'Dubai', 'Kahire', 'Moskova', 'Rio']), hints: ['Metropol', 'Turizm', 'Manzara', 'Ritim', 'Tarih'] }
+  ]
+};
+
+const hashString = (value) => {
+  const str = String(value);
+  let hash = 2166136261;
+  for (let i = 0; i < str.length; i += 1) {
+    hash ^= str.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+};
+
+const pickFrom = (arr, seed) => arr[seed % arr.length];
+
+const getHint = (cat, word, originalHint, idx) => {
+  const groups = hintGroups[cat];
+  if (groups) {
+    for (const g of groups) {
+      if (g.words?.has(word)) {
+        const seed = hashString(`${cat}|${word}|${idx}`);
+        return pickFrom(g.hints, seed);
+      }
+    }
+  }
+
+  const pool = hintPools[cat];
+  if (pool && pool.length) {
+    const seed = hashString(`${cat}|${word}|${idx}|pool`);
+    return pickFrom(pool, seed);
+  }
+
+  return originalHint || 'Belirsiz';
+};
+
+export const categories = Object.fromEntries(
+  Object.entries(rawCategories).map(([cat, list]) => [
+    cat,
+    list.map((item, idx) => {
+      const word = Array.isArray(item) ? item[0] : item.word;
+      const originalHint = Array.isArray(item) ? item[1] : item.hint;
+      return [word, getHint(cat, word, originalHint, idx)];
+    })
+  ])
+);
