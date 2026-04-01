@@ -1,0 +1,6 @@
+{
+  "appId": "com.imposterkim.app",
+  "appName": "İmposter Kim?",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
