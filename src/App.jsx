@@ -27,6 +27,7 @@ const App = () => {
   const [gameState, setGameState] = useState('HOME');
   const [players, setPlayers] = useState(['Eren', 'Ömer', 'Kaan', 'Muhammet']);
   const [imposterCount, setImposterCount] = useState(1);
+  const [scores, setScores] = useState({ Eren: 0, Ömer: 0, Kaan: 0, Muhammet: 0 });
   // Multiple categories can be selected
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [currentCategory, setCurrentCategory] = useState('');
@@ -39,6 +40,80 @@ const App = () => {
   const [activeRevealIndex, setActiveRevealIndex] = useState(null);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [showHowTo, setShowHowTo] = useState(false);
+  const [gameVotes, setGameVotes] = useState({});
+  const [activeVoteVoterIndex, setActiveVoteVoterIndex] = useState(null);
+  const [selectedVoteTarget, setSelectedVoteTarget] = useState('');
+  const [imposterGuessFor, setImposterGuessFor] = useState(null);
+  const [imposterGuesses, setImposterGuesses] = useState({});
+  const [imposterGuessText, setImposterGuessText] = useState('');
+  const [lastRound, setLastRound] = useState(null);
+
+  const normalizeText = (value) =>
+    String(value ?? '')
+      .toLocaleLowerCase('tr-TR')
+      .replace(/[\s\W_]+/g, '');
+
+  const getImposterNames = () => gameData.playerRoles.filter((p) => p.role === 'IMPOSTER').map((p) => p.name);
+
+  const startVoting = () => {
+    setGameVotes({});
+    setImposterGuesses({});
+    setImposterGuessFor(null);
+    setImposterGuessText('');
+    setActiveVoteVoterIndex(null);
+    setSelectedVoteTarget('');
+    setGameState('VOTING');
+  };
+
+  const finalizeRound = () => {
+    const imposterNames = getImposterNames();
+    const tally = Object.values(gameVotes).reduce((acc, name) => {
+      if (!name) return acc;
+      acc[name] = (acc[name] ?? 0) + 1;
+      return acc;
+    }, {});
+
+    const entries = Object.entries(tally).sort((a, b) => b[1] - a[1]);
+    const top = entries[0] ?? null;
+    const second = entries[1] ?? null;
+    const mostVotedName = top && (!second || top[1] > second[1]) ? top[0] : null;
+    const crewSuccess = mostVotedName ? imposterNames.includes(mostVotedName) : false;
+
+    const wordNorm = normalizeText(gameData.word);
+    const imposterWordCorrect = imposterNames.some((name) => normalizeText(imposterGuesses[name]) === wordNorm && wordNorm);
+    const imposterGetsPoints = imposterWordCorrect || !crewSuccess;
+
+    const deltas = {};
+    for (const pr of gameData.playerRoles) {
+      if (pr.role === 'IMPOSTER') {
+        deltas[pr.name] = imposterGetsPoints ? 20 : 0;
+      } else {
+        const voted = gameVotes[pr.name];
+        deltas[pr.name] = voted && imposterNames.includes(voted) ? 5 : 0;
+      }
+    }
+
+    setScores((prev) => {
+      const next = { ...prev };
+      for (const [name, delta] of Object.entries(deltas)) {
+        next[name] = (next[name] ?? 0) + (delta ?? 0);
+      }
+      return next;
+    });
+
+    setLastRound({
+      votes: gameVotes,
+      tally,
+      deltas,
+      mostVotedName,
+      crewSuccess,
+      imposterNames,
+      imposterGuesses,
+      imposterWordCorrect
+    });
+
+    setGameState('RESULT');
+  };
 
   // ---------------------------------------------------------
   // 1. HOME SCREEN
@@ -87,7 +162,10 @@ const App = () => {
     e?.preventDefault();
     if (players.length >= 20) return;
     if (newPlayerName.trim()) {
-      setPlayers([...players, newPlayerName.trim()]);
+      const name = newPlayerName.trim();
+      const nextPlayers = [...players, name];
+      setPlayers(nextPlayers);
+      setScores((prev) => ({ ...prev, [name]: prev[name] ?? 0 }));
       setNewPlayerName('');
     }
   };
@@ -97,6 +175,11 @@ const App = () => {
       const nextPlayers = players.filter((_, i) => i !== index);
       setPlayers(nextPlayers);
       setImposterCount((prev) => Math.min(Math.max(prev, 1), Math.max(1, nextPlayers.length - 1)));
+      setScores((prev) => {
+        const next = { ...prev };
+        delete next[players[index]];
+        return next;
+      });
     }
   };
 
@@ -493,8 +576,8 @@ const App = () => {
         </div>
 
         <div style={{ display: 'flex', gap: 12, marginBottom: 20, width: '100%' }}>
-          <button className="btn-primary" style={{ width: '100%', background: '#ef4444' }} onClick={() => setGameState('RESULT')}>
-            Kimlikleri Açıkla
+          <button className="btn-primary" style={{ width: '100%', background: '#ef4444' }} onClick={startVoting}>
+            Oylamaya Geç
           </button>
         </div>
       </motion.div>
@@ -502,43 +585,383 @@ const App = () => {
   };
 
   // ---------------------------------------------------------
-  // 6. RESULT
+  // 6. VOTING
   // ---------------------------------------------------------
-  const renderResult = () => (
-    <motion.div
-      initial={{ scale: 0.9, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      className="container"
-    >
-      <header style={{ marginBottom: 24, textAlign: 'center' }}>
-        <Trophy size={48} color="var(--accent)" style={{ marginBottom: 12 }} />
-        <h2 style={{ fontSize: '1.8rem' }}>Sonuçlar</h2>
-        <p style={{ color: 'var(--text-muted)' }}>İşte kimin ne olduğu!</p>
-      </header>
+  const renderVoting = () => {
+    const voterList = gameData.playerRoles ?? [];
+    const totalVoters = voterList.length;
+    const votedCount = Object.keys(gameVotes).length;
+    const allVoted = totalVoters > 0 && votedCount >= totalVoters;
+    const imposterNames = getImposterNames();
 
-      <div className="glass" style={{ padding: 20, marginBottom: 24 }}>
-        <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: 4 }}>Aranan Kelime:</div>
-        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'var(--primary)' }}>{gameData.word}</div>
-        <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: 8 }}>Kategori:</div>
-        <div style={{ fontSize: '1.2rem', fontWeight: '500', color: 'var(--accent)' }}>{currentCategory}</div>
-      </div>
+    const activeVoter = activeVoteVoterIndex !== null ? voterList[activeVoteVoterIndex] : null;
+    const candidates = activeVoter ? voterList.map((p) => p.name).filter((n) => n !== activeVoter.name) : [];
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, overflowY: 'auto', marginBottom: 20 }}>
-        {gameData.playerRoles.map((p, i) => (
-          <div key={i} className="glass" style={{ padding: 16, display: 'flex', justifyContent: 'space-between', borderLeft: p.role === 'IMPOSTER' ? '4px solid #ef4444' : '4px solid var(--success)' }}>
-            <span style={{ fontWeight: 600 }}>{p.name}</span>
-            <span style={{ color: p.role === 'IMPOSTER' ? '#ef4444' : 'var(--success)', fontWeight: 'bold', fontSize: '0.8rem', letterSpacing: 1 }}>
-              {p.role === 'IMPOSTER' ? 'SAHTEKAR' : 'OYUNCU'}
-            </span>
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="container"
+      >
+        <header style={{ marginBottom: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button
+              className="btn-secondary"
+              style={{ padding: 10, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              onClick={() => setGameState('GAME_PLAY')}
+            >
+              <ChevronRight style={{ transform: 'rotate(180deg)' }} />
+            </button>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <h2 style={{ fontSize: '1.8rem' }}>Oylama</h2>
+              <p style={{ color: 'var(--text-muted)' }}>Sırayla oy kullanın (gizli)</p>
+            </div>
           </div>
-        ))}
-      </div>
+        </header>
 
-      <button className="btn-primary" onClick={() => setGameState('SETUP_CATEGORY')}>
-        Yeni Tur
-      </button>
-    </motion.div>
-  );
+        <div className="glass" style={{ padding: 14, marginBottom: 14 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Oy kullanan</div>
+            <div style={{ fontWeight: 700, color: 'white' }}>{votedCount} / {totalVoters}</div>
+          </div>
+        </div>
+
+        <div style={{ flex: 1, overflowY: 'auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, alignContent: 'start' }}>
+            {voterList.map((p, i) => {
+              const hasVoted = Boolean(gameVotes[p.name]);
+              return (
+                <motion.div
+                  key={p.name}
+                  whileTap={{ scale: 0.95 }}
+                  className="glass"
+                  onClick={() => {
+                    if (hasVoted) return;
+                    setSelectedVoteTarget('');
+                    setActiveVoteVoterIndex(i);
+                  }}
+                  style={{
+                    padding: 18,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    opacity: hasVoted ? 0.35 : 1,
+                    cursor: hasVoted ? 'default' : 'pointer'
+                  }}
+                >
+                  <div style={{ width: 44, height: 44, background: 'rgba(255,255,255,0.05)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+                    {hasVoted ? <UserCheck size={20} color="var(--success)" /> : <Users size={20} />}
+                  </div>
+                  <div style={{ fontWeight: 700 }}>{p.name}</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: 6 }}>
+                    {hasVoted ? 'Oy verildi' : 'Oy ver'}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {imposterNames.length > 0 && (
+            <div className="glass" style={{ padding: 14, marginTop: 14 }}>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: 10 }}>Sahtekar kelime tahmini (isteğe bağlı)</div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {imposterNames.map((name) => {
+                  const hasGuess = Boolean((imposterGuesses[name] ?? '').trim());
+                  return (
+                    <button
+                      key={name}
+                      className="btn-secondary"
+                      style={{ padding: '10px 12px', opacity: 1 }}
+                      onClick={() => {
+                        setImposterGuessFor(name);
+                        setImposterGuessText(imposterGuesses[name] ?? '');
+                      }}
+                    >
+                      {name}{hasGuess ? ' ✓' : ''}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div style={{ display: 'flex', gap: 12, marginTop: 14, marginBottom: 20 }}>
+          <button className="btn-primary" style={{ flex: 1, opacity: allVoted ? 1 : 0.5 }} disabled={!allVoted} onClick={finalizeRound}>
+            Sonuçları Göster
+          </button>
+        </div>
+
+        <AnimatePresence>
+          {activeVoteVoterIndex !== null && activeVoter && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(0,0,0,0.9)',
+                backdropFilter: 'blur(10px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 150,
+                padding: 20
+              }}
+              onClick={() => setActiveVoteVoterIndex(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.95, y: 16 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 16 }}
+                className="glass"
+                style={{ width: '100%', maxWidth: 520, padding: 18 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 12 }}>
+                  <h3 style={{ fontSize: '1.2rem' }}>Oy kullan: {activeVoter.name}</h3>
+                  <button
+                    onClick={() => setActiveVoteVoterIndex(null)}
+                    style={{ background: 'transparent', border: 'none', color: 'white', padding: 8, cursor: 'pointer' }}
+                  >
+                    <X />
+                  </button>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 10 }}>
+                  {candidates.map((name) => (
+                    <button
+                      key={name}
+                      className="btn-secondary"
+                      style={{
+                        padding: 14,
+                        border: selectedVoteTarget === name ? '2px solid var(--primary)' : '1px solid rgba(255,255,255,0.1)',
+                        background: selectedVoteTarget === name ? 'rgba(99, 102, 241, 0.12)' : 'rgba(255,255,255,0.05)'
+                      }}
+                      onClick={() => setSelectedVoteTarget(name)}
+                    >
+                      {name}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  className="btn-primary"
+                  style={{ width: '100%', marginTop: 14, opacity: selectedVoteTarget ? 1 : 0.5 }}
+                  disabled={!selectedVoteTarget}
+                  onClick={() => {
+                    setGameVotes((prev) => ({ ...prev, [activeVoter.name]: selectedVoteTarget }));
+                    setActiveVoteVoterIndex(null);
+                    setSelectedVoteTarget('');
+                  }}
+                >
+                  Onayla
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {imposterGuessFor && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(0,0,0,0.9)',
+                backdropFilter: 'blur(10px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 160,
+                padding: 20
+              }}
+              onClick={() => setImposterGuessFor(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.95, y: 16 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 16 }}
+                className="glass"
+                style={{ width: '100%', maxWidth: 520, padding: 18 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 12 }}>
+                  <h3 style={{ fontSize: '1.2rem' }}>Kelime tahmini: {imposterGuessFor}</h3>
+                  <button
+                    onClick={() => setImposterGuessFor(null)}
+                    style={{ background: 'transparent', border: 'none', color: 'white', padding: 8, cursor: 'pointer' }}
+                  >
+                    <X />
+                  </button>
+                </div>
+
+                <input
+                  type="text"
+                  value={imposterGuessText}
+                  onChange={(e) => setImposterGuessText(e.target.value)}
+                  placeholder="Tahmin yaz..."
+                  className="glass"
+                  style={{ width: '100%', padding: '12px 14px', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: 12, outline: 'none' }}
+                />
+
+                <button
+                  className="btn-primary"
+                  style={{ width: '100%', marginTop: 14 }}
+                  onClick={() => {
+                    const guess = imposterGuessText.trim();
+                    setImposterGuesses((prev) => ({ ...prev, [imposterGuessFor]: guess }));
+                    setImposterGuessFor(null);
+                    setImposterGuessText('');
+                  }}
+                >
+                  Kaydet
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    );
+  };
+
+  // ---------------------------------------------------------
+  // 7. RESULT
+  // ---------------------------------------------------------
+  const renderResult = () => {
+    const deltas = lastRound?.deltas ?? {};
+    const sortedScores = Object.entries(scores).sort((a, b) => (b[1] ?? 0) - (a[1] ?? 0));
+    const mostVotedName = lastRound?.mostVotedName ?? null;
+    const crewSuccess = Boolean(lastRound?.crewSuccess);
+    const imposterWordCorrect = Boolean(lastRound?.imposterWordCorrect);
+
+    return (
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="container"
+      >
+        <header style={{ marginBottom: 16, textAlign: 'center' }}>
+          <Trophy size={48} color="var(--accent)" style={{ marginBottom: 10 }} />
+          <h2 style={{ fontSize: '1.8rem' }}>Sonuçlar</h2>
+          <p style={{ color: 'var(--text-muted)' }}>Puanlar güncellendi.</p>
+        </header>
+
+        <div className="glass" style={{ padding: 16, marginBottom: 12 }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 4 }}>Aranan Kelime</div>
+          <div style={{ fontSize: '1.6rem', fontWeight: 'bold', color: 'var(--primary)' }}>{gameData.word}</div>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: 8 }}>Kategori</div>
+          <div style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--accent)' }}>{currentCategory}</div>
+        </div>
+
+        <div className="glass" style={{ padding: 16, marginBottom: 12 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginBottom: 8 }}>
+            <div style={{ color: 'var(--text-muted)' }}>En çok oy</div>
+            <div style={{ fontWeight: 700, color: 'white' }}>{mostVotedName ?? 'Berabere / Geçersiz'}</div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginBottom: 8 }}>
+            <div style={{ color: 'var(--text-muted)' }}>Sonuç</div>
+            <div style={{ fontWeight: 700, color: crewSuccess ? 'var(--success)' : '#ef4444' }}>
+              {crewSuccess ? 'Sahtekar bulundu' : 'Sahtekar kaçtı'}
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
+            <div style={{ color: 'var(--text-muted)' }}>Sahtekar kelime tahmini</div>
+            <div style={{ fontWeight: 700, color: imposterWordCorrect ? '#ef4444' : 'var(--text-muted)' }}>
+              {imposterWordCorrect ? 'Doğru' : 'Yanlış / Yok'}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, overflowY: 'auto', marginBottom: 12 }}>
+          <div className="glass" style={{ padding: 16 }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 10 }}>Roller</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {gameData.playerRoles.map((p) => {
+                const delta = deltas[p.name] ?? 0;
+                const total = scores[p.name] ?? 0;
+                return (
+                  <div
+                    key={p.name}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: 12,
+                      borderRadius: 14,
+                      background: 'rgba(255,255,255,0.04)',
+                      borderLeft: p.role === 'IMPOSTER' ? '4px solid #ef4444' : '4px solid var(--success)'
+                    }}
+                  >
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      <div style={{ fontWeight: 700, color: 'white' }}>{p.name}</div>
+                      <div style={{ fontSize: '0.8rem', letterSpacing: 1, color: p.role === 'IMPOSTER' ? '#ef4444' : 'var(--success)', fontWeight: 800 }}>
+                        {p.role === 'IMPOSTER' ? 'SAHTEKAR' : 'OYUNCU'}
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
+                      <div style={{ fontWeight: 800, color: 'white' }}>{total} P</div>
+                      <div style={{ fontSize: '0.85rem', color: delta > 0 ? 'var(--accent)' : 'var(--text-muted)', fontWeight: 700 }}>
+                        {delta > 0 ? `+${delta}` : '0'}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="glass" style={{ padding: 16 }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 10 }}>Puan Tablosu</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {sortedScores.map(([name, total]) => (
+                <div key={name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 12, borderRadius: 14, background: 'rgba(255,255,255,0.04)' }}>
+                  <div style={{ fontWeight: 700 }}>{name}</div>
+                  <div style={{ fontWeight: 900, color: 'white' }}>{total} P</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
+          <button
+            className="btn-secondary"
+            style={{ flex: 1 }}
+            onClick={() => {
+              setScores(Object.fromEntries(players.map((p) => [p, 0])));
+            }}
+          >
+            Skoru Sıfırla
+          </button>
+          <button
+            className="btn-primary"
+            style={{ flex: 2 }}
+            onClick={() => {
+              setGameVotes({});
+              setImposterGuesses({});
+              setLastRound(null);
+              setGameState('SETUP_CATEGORY');
+            }}
+          >
+            Yeni Tur
+          </button>
+        </div>
+      </motion.div>
+    );
+  };
 
   return (
     <div style={{ position: 'relative', minHeight: '100dvh', height: '100dvh', display: 'flex', flexDirection: 'column' }}>
@@ -548,6 +971,7 @@ const App = () => {
         {gameState === 'SETUP_CATEGORY' && renderSetupCategory()}
         {gameState === 'DISTRIBUTION' && renderDistribution()}
         {gameState === 'GAME_PLAY' && renderGamePlay()}
+        {gameState === 'VOTING' && renderVoting()}
         {gameState === 'RESULT' && renderResult()}
       </AnimatePresence>
 
@@ -606,7 +1030,7 @@ const App = () => {
                 </div>
                 <div className="glass" style={{ padding: 14 }}>
                   <div style={{ color: 'white', fontWeight: 600, marginBottom: 6 }}>4) Oylama</div>
-                  <div>Tartışıp sahtekar(lar)ı bulmaya çalışın. Son turda “Kimlikleri Açıkla” ile roller ortaya çıkar.</div>
+                  <div>Tartışıp oy kullanın. Herkes oy verdikten sonra “Sonuçları Göster” ile roller ve puanlar ortaya çıkar.</div>
                 </div>
               </div>
 

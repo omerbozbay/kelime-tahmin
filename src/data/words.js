@@ -1865,7 +1865,408 @@ const hashString = (value) => {
 
 const pickFrom = (arr, seed) => arr[seed % arr.length];
 
+const hintOverrides = {
+  'Araçlar|Kart': 'Yarış',
+  'Araçlar|Karting': 'Yarış',
+  'Markalar|Asus': 'Laptop',
+  'Markalar|Beko': 'Beyaz',
+  'Markalar|Dell': 'Laptop',
+  'Markalar|LG': 'Ekran',
+  'Markalar|Nvidia': 'Ekrankartı',
+  'Markalar|Siemens': 'Beyaz',
+  'Markalar|Vestel': 'Elektronik',
+  'Markalar|Vivo': 'Telefon',
+  'Nesneler|GüneşGözlüğü': 'Güneş',
+  'Nesneler|Router': 'İnternet',
+  'Oyunlar|AmongUsVR': 'Sanal',
+  'Oyunlar|CS2': 'Nişancı',
+  'Oyunlar|KnightOnline': 'Savaş',
+  'Oyunlar|LeagueofLegends': 'Şampiyon',
+  'Oyunlar|LoL': 'Şampiyon',
+  'Oyunlar|Metin2': 'Online',
+  'Oyunlar|MobileLegends': 'Arena',
+  'Oyunlar|eFootball': 'Futbol',
+  'Sporlar|Binicilik': 'Eyer',
+  'Sporlar|Crossfit': 'Antrenman',
+  'Sporlar|Dart': 'Hedef',
+  'Ünlüler|MichaelJordan': 'NBA'
+};
+
+const addWords = {
+  'Hayvanlar': [
+    ['Martı', 'Sahil'],
+    ['Kırlangıç', 'Göç'],
+    ['Tavuskuşu', 'Tüy'],
+    ['Civciv', 'Yumurta'],
+    ['Balık', 'Su'],
+    ['Kuzu', 'Meleme'],
+    ['Oğlak', 'Keçi'],
+    ['Tavşan', 'Havuç'],
+    ['Tilki', 'Kurnaz'],
+    ['Kurt', 'Sürü'],
+    ['At', 'Eyer'],
+    ['İnek', 'Süt'],
+    ['Koyun', 'Yün'],
+    ['Keçi', 'Süt'],
+    ['Ördek', 'Gaga'],
+    ['Kaz', 'Tüy'],
+    ['Horoz', 'Ötüş'],
+    ['Tavuk', 'Yumurta'],
+    ['Kurbağa', 'Vırak'],
+    ['Kaplumbağa', 'Kabuk'],
+    ['Kertenkele', 'Kuyruk'],
+    ['Yılan', 'Zehir'],
+    ['Kunduz', 'Baraj']
+  ],
+  'Yiyecekler': [
+    ['Çiğköfte', 'Isot'],
+    ['Tantuni', 'Mersin'],
+    ['Kumpir', 'Fırın'],
+    ['Sarma', 'Yaprak'],
+    ['Dolma', 'İç'],
+    ['MercimekKöftesi', 'Kısır'],
+    ['İmamBayıldı', 'Patlıcan'],
+    ['Karnıyarık', 'Patlıcan'],
+    ['Pilav', 'Tane'],
+    ['Kısır', 'Bulgur'],
+    ['Çorbacı', 'Sıcak'],
+    ['Simitçi', 'Susam'],
+    ['Pankek', 'Tava'],
+    ['Puding', 'Süt'],
+    ['Krep', 'İnce'],
+    ['Tost', 'Kaşar'],
+    ['Mısır', 'Koçan'],
+    ['Kestane', 'Köz'],
+    ['Böğürtlen', 'Mor'],
+    ['Ayçekirdeği', 'Tuz']
+  ],
+  'Nesneler': [
+    ['Tepsi', 'Servis'],
+    ['Fırça', 'Boya'],
+    ['Kibrit', 'Ateş'],
+    ['Çakmak', 'Ateş'],
+    ['Düdük', 'Ses'],
+    ['Keman', 'Yay'],
+    ['Piyano', 'Tuş'],
+    ['Davul', 'Ritim'],
+    ['Top', 'Yuvarlak'],
+    ['Yelpaze', 'Serin'],
+    ['Mendil', 'Burun'],
+    ['Kutu', 'Sakla'],
+    ['Kutulama', 'Paket'],
+    ['Kilit', 'Anahtar'],
+    ['Çerçeve', 'Fotoğraf'],
+    ['MasaLambası', 'Işık'],
+    ['Hediyelik', 'Paket'],
+    ['Pijama', 'Uyku'],
+    ['Terlik', 'Ev'],
+    ['Çorap', 'Ayak']
+  ],
+  'Film/Dizi': [
+    ['LaCasaDePapel', 'Maske'],
+    ['TheLastOfUs', 'Kıyamet'],
+    ['PrisonBreak', 'Kaçış'],
+    ['TheBigBangTheory', 'Bilim'],
+    ['Dexter', 'Seri'],
+    ['TheFlash', 'Hız'],
+    ['Batman', 'Maske'],
+    ['Superman', 'Pelerin'],
+    ['Barbie', 'Pembe'],
+    ['Oppenheimer', 'Bomba'],
+    ['Jumanji', 'Oyun'],
+    ['HarryPotter', 'Büyü'],
+    ['YüzüklerinEfendisi', 'Yüzük'],
+    ['EsaretinBedeli', 'Umut'],
+    ['YeşilYol', 'Mucize'],
+    ['Inception', 'Rüya'],
+    ['Interstellar', 'Uzay'],
+    ['Avatar', 'Mavi'],
+    ['AşkTesadüfleriSever', 'Kader'],
+    ['SihirbazlarÇetesi', 'Hile']
+  ],
+  'Mekanlar': [
+    ['Kahvehane', 'Okey'],
+    ['Pastane', 'Tatlı'],
+    ['Stadyum', 'Tribün'],
+    ['Kordon', 'Sahil'],
+    ['Iskele', 'Vapur'],
+    ['OyunParkı', 'Kaydırak'],
+    ['FutbolSahası', 'Krampon'],
+    ['Poligon', 'Hedef'],
+    ['Karakol', 'Devriye'],
+    ['Adliye', 'Duruşma'],
+    ['Meyhane', 'Müzik'],
+    ['PiknikAlanı', 'Mangal'],
+    ['DağEvi', 'Şömine'],
+    ['ManzaraNoktası', 'Seyir'],
+    ['YürüyüşYolu', 'Rota'],
+    ['BalıkRestoranı', 'Limon'],
+    ['Kampüs', 'Öğrenci'],
+    ['Pazar', 'Tezgah'],
+    ['SporSalonu', 'Ağırlık'],
+    ['Otel', 'Rezervasyon']
+  ],
+  'Sporlar': [
+    ['Futsal', 'Salon'],
+    ['BilekGüreşi', 'Kol'],
+    ['HalıSaha', 'Krampon'],
+    ['Zumba', 'Ritim'],
+    ['Step', 'Tempo'],
+    ['Fitness', 'Kas'],
+    ['VücutGeliştirme', 'Kas'],
+    ['MasaTenisi', 'Pinpon'],
+    ['Badminton', 'Tüytop'],
+    ['Okçuluk', 'Yay'],
+    ['Triatlon', 'Dayanım'],
+    ['Kros', 'Arazi'],
+    ['DağKoşusu', 'Zirve'],
+    ['Sutopu', 'Havuz'],
+    ['SerbestGüreş', 'Minder'],
+    ['GrekoRomen', 'Minder'],
+    ['JiuJitsu', 'Kilit'],
+    ['Parkur', 'Engel'],
+    ['StreetWorkout', 'Bar'],
+    ['BuzPateni', 'Buz']
+  ],
+  'Meslekler': [
+    ['Mühendis', 'Proje'],
+    ['Yazılımcı', 'Kod'],
+    ['Şoför', 'Direksiyon'],
+    ['Aşçı', 'Mutfak'],
+    ['Garson', 'Servis'],
+    ['Berber', 'Tıraş'],
+    ['Kuaför', 'Fön'],
+    ['Polis', 'Devriye'],
+    ['Asker', 'Nöbet'],
+    ['Öğretmen', 'Ders'],
+    ['Doktor', 'Muayene'],
+    ['Hemşire', 'Serum'],
+    ['DişHekimi', 'Diş'],
+    ['Eczacı', 'Reçete'],
+    ['Pilot', 'Kokpit'],
+    ['Hostes', 'Kabin'],
+    ['Avukat', 'Dava'],
+    ['Muhasebeci', 'Bilanço'],
+    ['Kasap', 'Bıçak'],
+    ['Fırıncı', 'Hamur']
+  ],
+  'Markalar': [
+    ['Turkcell', 'Hat'],
+    ['TürkTelekom', 'İnternet'],
+    ['Vodafone', 'Hat'],
+    ['GarantiBBVA', 'Banka'],
+    ['Akbank', 'Banka'],
+    ['İşBankası', 'Banka'],
+    ['ZiraatBankası', 'Banka'],
+    ['Halkbank', 'Banka'],
+    ['THY', 'Uçuş'],
+    ['Pegasus', 'Uçuş'],
+    ['Opet', 'Yakıt'],
+    ['PetrolOfisi', 'Yakıt'],
+    ['Shell', 'Yakıt'],
+    ['Netflix', 'Dizi'],
+    ['Spotify', 'Müzik'],
+    ['YouTube', 'Video'],
+    ['TikTok', 'Video'],
+    ['Instagram', 'Fotoğraf'],
+    ['WhatsApp', 'Mesaj'],
+    ['Facebook', 'Sosyal']
+  ],
+  'Araçlar': [
+    ['Minivan', 'Aile'],
+    ['Kamyonet', 'Yük'],
+    ['Mikrobus', 'Servis'],
+    ['Taksi', 'Şoför'],
+    ['Dolmuş', 'Hat'],
+    ['Otobüs', 'Durak'],
+    ['Tren', 'Ray'],
+    ['Metro', 'Tünel'],
+    ['Uçak', 'Kanat'],
+    ['Helikopter', 'Rotor'],
+    ['Gemi', 'Deniz'],
+    ['Feribot', 'Vapur'],
+    ['Bisiklet', 'Pedal'],
+    ['Motosiklet', 'Kask'],
+    ['Scooter', 'Teker'],
+    ['Traktör', 'Tarla'],
+    ['Ambulans', 'Siren'],
+    ['İtfaiye', 'Siren'],
+    ['PolisArabası', 'Çakar'],
+    ['ServisAracı', 'Okul']
+  ],
+  'Süper Güçler': [
+    ['Uçuş', 'Gökyüzü'],
+    ['Görünmezlik', 'Saklan'],
+    ['SüperHız', 'Şimşek'],
+    ['SüperGüç', 'Kuvvet'],
+    ['ZihinOkuma', 'Telepati'],
+    ['Telekinezi', 'Nesne'],
+    ['Işınlanma', 'Anlık'],
+    ['ZamanDurdurma', 'Don'],
+    ['AteşKontrolü', 'Alev'],
+    ['SuKontrolü', 'Dalga'],
+    ['BuzKontrolü', 'Don'],
+    ['ElektrikKontrolü', 'Şok'],
+    ['ŞekilDeğiştirme', 'Kılık'],
+    ['Hızlıİyileşme', 'Şifa'],
+    ['Kalkan', 'Bariyer'],
+    ['LazerGöz', 'Işın'],
+    ['DuvarTırmanma', 'Yapış'],
+    ['HayvanKonuşma', 'Dil'],
+    ['GeceGörüşü', 'Karanlık'],
+    ['GölgeKontrolü', 'Gölge']
+  ],
+  'Korkular': [
+    ['Karanlık', 'Gece'],
+    ['Yükseklik', 'Uçurum'],
+    ['Yılan', 'Zehir'],
+    ['Örümcek', 'Ağ'],
+    ['Deprem', 'Sarsıntı'],
+    ['Uçak', 'Türbülans'],
+    ['Köpek', 'Havlama'],
+    ['Kedi', 'Tırmık'],
+    ['Böcek', 'Vızır'],
+    ['KapalıAlan', 'Kilit'],
+    ['Kalabalık', 'Meydan'],
+    ['Yalnızlık', 'Sessizlik'],
+    ['İğne', 'Serum'],
+    ['Kan', 'Kırmızı'],
+    ['Su', 'Boğulma'],
+    ['Ateş', 'Yanık'],
+    ['Gece', 'Karanlık'],
+    ['Mezarlık', 'Sessiz'],
+    ['Hayalet', 'Korku'],
+    ['Sınav', 'Not']
+  ],
+  'Ünlüler': [
+    ['AcunIlıcalı', 'Yapımcı'],
+    ['Nusret', 'Tuz'],
+    ['ArdaGüler', 'Futbol'],
+    ['SibelCan', 'Sahne'],
+    ['MelekMosso', 'Şarkı'],
+    ['OğuzhanKoç', 'Müzik'],
+    ['GökhanTürkmen', 'Şarkı'],
+    ['Buray', 'Pop'],
+    ['AleynaTilki', 'Pop'],
+    ['Simge', 'Pop'],
+    ['SedaSayan', 'Sunucu'],
+    ['MügeAnlı', 'Program'],
+    ['KenanDoğulu', 'Pop'],
+    ['EbruYaşar', 'Sahne'],
+    ['MahsunKırmızıgül', 'Şarkı'],
+    ['HalukLevent', 'Rock'],
+    ['ŞevvalSam', 'Sahne'],
+    ['SerdarOrtaç', 'Pop'],
+    ['BurakYılmaz', 'Futbol'],
+    ['RıdvanDilmen', 'Yorum']
+  ],
+  'Oyunlar': [
+    ['CounterStrike', 'Rekabet'],
+    ['CallofDuty', 'Savaş'],
+    ['AmongUs', 'İmposter'],
+    ['Minecraft', 'Blok'],
+    ['Roblox', 'Platform'],
+    ['GTA5', 'Şehir'],
+    ['FIFA', 'Futbol'],
+    ['eFootball', 'Futbol'],
+    ['Valorant', 'Ajan'],
+    ['PUBG', 'Hayatta'],
+    ['Fortnite', 'İnşa'],
+    ['LeagueofLegends', 'MOBA'],
+    ['Dota2', 'MOBA'],
+    ['TheSims', 'Hayat'],
+    ['NeedForSpeed', 'Hız'],
+    ['ClashRoyale', 'Arena'],
+    ['BrawlStars', 'Brawler'],
+    ['CandyCrush', 'Şeker'],
+    ['Monopoly', 'Emlak'],
+    ['Uno', 'Kart']
+  ],
+  'Hobiler': [
+    ['Futbol', 'Top'],
+    ['Basketbol', 'Pota'],
+    ['Yürüyüş', 'Adım'],
+    ['Koşu', 'Tempo'],
+    ['Bisiklet', 'Pedal'],
+    ['Yüzme', 'Kulaç'],
+    ['Kamp', 'Çadır'],
+    ['BalıkTutma', 'Olta'],
+    ['Fotoğraf', 'Kamera'],
+    ['Müzik', 'Ritim'],
+    ['Gitar', 'Akor'],
+    ['Piyano', 'Tuş'],
+    ['Resim', 'Tuval'],
+    ['Kitap', 'Roman'],
+    ['Satranç', 'Şah'],
+    ['Tavla', 'Zar'],
+    ['Okey', 'Taş'],
+    ['Yemek', 'Tarif'],
+    ['Bahçe', 'Toprak'],
+    ['Puzzle', 'Parça']
+  ],
+  'Ülkeler': [
+    ['İngiltere', 'Ada'],
+    ['ABD', 'Hollywood'],
+    ['Japonya', 'Samuray'],
+    ['Çin', 'Sedd'],
+    ['Rusya', 'Kış'],
+    ['Mısır', 'Piramit'],
+    ['Yunanistan', 'Tarih'],
+    ['İtalya', 'Pizza'],
+    ['Fransa', 'Eyfel'],
+    ['Almanya', 'Araba'],
+    ['İspanya', 'Flamenko'],
+    ['Brezilya', 'Samba'],
+    ['Arjantin', 'Tango'],
+    ['Avustralya', 'Kanguru'],
+    ['Kanada', 'Akçaağaç'],
+    ['Hindistan', 'Baharat'],
+    ['GüneyKore', 'Kpop'],
+    ['Meksika', 'Taco'],
+    ['Hollanda', 'Lale'],
+    ['İsviçre', 'Saat']
+  ],
+  'Şehirler': [
+    ['Madrid', 'Futbol'],
+    ['Lizbon', 'Sahil'],
+    ['Atina', 'Tarih'],
+    ['Roma', 'Tarih'],
+    ['Paris', 'Eyfel'],
+    ['Londra', 'Sis'],
+    ['Berlin', 'Duvar'],
+    ['Amsterdam', 'Kanal'],
+    ['NewYork', 'Manhattan'],
+    ['Tokyo', 'Kalabalık'],
+    ['Dubai', 'Gökdelen'],
+    ['Moskova', 'Kış'],
+    ['Kahire', 'Nil'],
+    ['Rio', 'Karnaval'],
+    ['İstanbul', 'Boğaz'],
+    ['Ankara', 'Başkent'],
+    ['İzmir', 'Kordon'],
+    ['Antalya', 'Turizm'],
+    ['Bursa', 'Uludağ'],
+    ['Gaziantep', 'Lezzet']
+  ]
+};
+
+const isWeakHint = (hint) => {
+  const h = String(hint ?? '').trim();
+  if (!h) return true;
+  if (h.length <= 1) return true;
+  if (/^\d+$/.test(h)) return true;
+  if (/^[A-Z0-9]+$/.test(h)) return true;
+  if (/^(Go|WiFi)$/i.test(h)) return true;
+  return false;
+};
+
 const getHint = (cat, word, originalHint, idx) => {
+  const override = hintOverrides[`${cat}|${word}`];
+  if (override) return override;
+
+  const trimmedOriginal = String(originalHint ?? '').trim();
+  if (trimmedOriginal && !isWeakHint(trimmedOriginal)) return trimmedOriginal;
+
   const groups = hintGroups[cat];
   if (groups) {
     for (const g of groups) {
@@ -1882,16 +2283,22 @@ const getHint = (cat, word, originalHint, idx) => {
     return pickFrom(pool, seed);
   }
 
-  return originalHint || 'Belirsiz';
+  return trimmedOriginal || 'Belirsiz';
 };
 
 export const categories = Object.fromEntries(
-  Object.entries(rawCategories).map(([cat, list]) => [
-    cat,
-    list.map((item, idx) => {
-      const word = Array.isArray(item) ? item[0] : item.word;
-      const originalHint = Array.isArray(item) ? item[1] : item.hint;
-      return [word, getHint(cat, word, originalHint, idx)];
-    })
-  ])
+  Object.entries(rawCategories).map(([cat, list]) => {
+    const base = list.slice(0, 80);
+    const extras = addWords[cat] ?? [];
+    const combined = base.concat(extras).concat(list.slice(80));
+
+    return [
+      cat,
+      combined.slice(0, 100).map((item, idx) => {
+        const word = Array.isArray(item) ? item[0] : item.word;
+        const originalHint = Array.isArray(item) ? item[1] : item.hint;
+        return [word, getHint(cat, word, originalHint, idx)];
+      })
+    ];
+  })
 );
